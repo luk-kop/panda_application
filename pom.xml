@@ -18,6 +18,8 @@
 
   <properties>
     <java.version>11</java.version>
+    <artifactory.ip>192.168.44.44</artifactory.ip>
+    <artifactory.port>8081</artifactory.port>
   </properties>
 
   <dependencies>
@@ -103,7 +105,9 @@
               </execution>
             </executions>
             <configuration>
-              <repository>${project.artifactId}</repository>
+              <!-- <repository>${project.artifactId}</repository>
+              <tag>${project.version}</tag> -->
+              <repository>${artifactory.ip}:${artifactory.port}/docker1/${project.artifactId}</repository>
               <tag>${project.version}</tag>
               <buildArgs>
                 <JAR_FILE>target/${project.artifactId}-${project.version}.jar</JAR_FILE>
@@ -144,12 +148,12 @@
                 <repository>
                         <id>artifactory</id>
                         <name>release</name>
-                        <url>http://192.168.44.44:8081/artifactory/libs-release-local</url>
+                        <url>http://${artifactory.ip}:${artifactory.port}/artifactory/libs-release-local</url>
                 </repository>
                 <snapshotRepository>
                         <id>artifactory</id>
                         <name>snapshots</name>
-                        <url>http://192.168.44.44:8081/artifactory/libs-snapshot-local</url>
+                        <url>http://${artifactory.ip}:${artifactory.port}/artifactory/libs-snapshot-local</url>
                 </snapshotRepository>
         </distributionManagement>
         
