@@ -5,12 +5,12 @@
     <repository>
       <id>artifactory</id>
       <name>release</name>
-      <url>http://192.168.44.44:8081/artifactory/libs-release-local</url>
+      <url>http://${artifactory.ip}:${artifactory.port}/artifactory/libs-release-local</url>
     </repository>
     <snapshotRepository>
       <id>artifactory</id>
       <name>snapshots</name>
-      <url>http://192.168.44.44:8081/artifactory/libs-snapshot-local</url>
+      <url>http://${artifactory.ip}:${artifactory.port}/artifactory/libs-snapshot-local</url>
     </snapshotRepository>
   </distributionManagement>
   <modelVersion>4.0.0</modelVersion>
@@ -28,22 +28,27 @@
   <description>Demo project for Spring Boot</description>
   <properties>
     <java.version>11</java.version>
+    <artifactory.ip>192.168.44.44</artifactory.ip>
+    <artifactory.port>8081</artifactory.port>
   </properties>
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-thymeleaf</artifactId>
     </dependency>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
@@ -55,6 +60,7 @@
         </exclusion>
       </exclusions>
     </dependency>
+
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
@@ -125,6 +131,7 @@
         </plugins>
       </build>
     </profile>
+    
     <profile>
       <id>selenium</id>
       <build>
