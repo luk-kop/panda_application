@@ -5,12 +5,12 @@
     <repository>
       <id>artifactory</id>
       <name>release</name>
-      <url>http://${artifactory.ip}:${artifactory.port}/artifactory/libs-release-local</url>
+      <url>http://${artifactory.host}:${artifactory.port}/artifactory/libs-release-local</url>
     </repository>
     <snapshotRepository>
       <id>artifactory</id>
       <name>snapshots</name>
-      <url>http://${artifactory.ip}:${artifactory.port}/artifactory/libs-snapshot-local</url>
+      <url>http://${artifactory.host}:${artifactory.port}/artifactory/libs-snapshot-local</url>
     </snapshotRepository>
   </distributionManagement>
   <modelVersion>4.0.0</modelVersion>
@@ -28,7 +28,7 @@
   <description>Demo project for Spring Boot</description>
   <properties>
     <java.version>11</java.version>
-    <artifactory.ip>192.168.44.44</artifactory.ip>
+    <artifactory.host>artifactorycompose</artifactory.host>
     <artifactory.port>8081</artifactory.port>
   </properties>
   <dependencies>
@@ -114,7 +114,7 @@
             </executions>
             <configuration>              
             <!-- <repository>${project.artifactId}</repository><tag>${project.version}</tag> -->
-              <repository>${artifactory.ip}:${artifactory.port}/docker1/${project.artifactId}</repository>
+              <repository>${artifactory.host}:${artifactory.port}/docker1/${project.artifactId}</repository>
               <tag>${project.version}</tag>
               <buildArgs>
                 <JAR_FILE>target/${project.artifactId}-${project.version}.jar</JAR_FILE>
@@ -139,7 +139,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.19.1</version>
+            <version>2.22.2</version>
             <configuration>
               <includes>
                 <include>**.*SeleniumTest.java</include>

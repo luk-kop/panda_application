@@ -29,10 +29,12 @@ public class PandaApplicationSeleniumTest {
         
         DesiredCapabilities capabilities = DesiredCapabilities.firefox();
         capabilities.setPlatform(Platform.LINUX);
-        driver = new RemoteWebDriver(new URL("http://192.168.44.44:4444/wd/hub"), capabilities);
-        // Pamiętaj, że aplikacja Spring musi działać! To znaczy też musi być włączona.
         
-        driver.get(String.format("http://ubuntuslave:%s/", port));
+        // Odwołujemy się do zdalnego silnika Firefox z Selenium Grid
+        driver = new RemoteWebDriver(new URL("http://192.168.44.44:4444/wd/hub"), capabilities);
+        
+        // Pamiętaj, że aplikacja Spring musi działać! To znaczy też musi być włączona.
+        driver.get(String.format("http://ubuntucompose:%s/", port));
 
 
         //Czekamy 2 sekundy
@@ -41,7 +43,7 @@ public class PandaApplicationSeleniumTest {
 
     @Test
     public void greetings_shouldOpenMainPageThenReturnWelcomeText() {
-        System.out.println("Uruchamiam test 1: Sprawdzenie napisu na stronie głównej");
+        System.out.println("Uruchamiam test 1: Sprawdzenie napisu na stronie glownej");
         WebElement greetingElement = driver.findElement(By.xpath("//p"));
         String greetingText = greetingElement.getText().trim();
         assertEquals("Get your greeting here", greetingText);
@@ -58,7 +60,6 @@ public class PandaApplicationSeleniumTest {
         String newPageString = helloWorldString.getText().trim();
         assertEquals("Hello, World!", newPageString);
     }
-
 
     @AfterEach
     public void after() {
