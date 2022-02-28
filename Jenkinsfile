@@ -47,7 +47,7 @@ pipeline {
         }
         stage('Application deployment') {
             steps {
-                configFileProvider([configFile('36a02879-07cb-4ab3-8f5c-85a05dd037d9', variable: 'MAVEN_GLOBAL_SETTINGS')]) {
+                configFileProvider([configFile(fileId: '36a02879-07cb-4ab3-8f5c-85a05dd037d9', variable: 'MAVEN_GLOBAL_SETTINGS')]) {
                     sh "mvn -gs ${MAVEN_GLOBAL_SETTINGS} deploy -Dmaven.test.skip=true -e"
                 }
             } 
