@@ -5,7 +5,11 @@ pipeline {
     tools {
         maven 'M3.6.3'
     }
-
+        environment {
+		CONTAINER_NAME = 'pandaapp'
+        IMAGE = sh script: 'mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout', returnStdout: true
+        VERSION = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
+	}
     stages {
         stage('Clear running apps') {
             steps {
@@ -54,11 +58,8 @@ pipeline {
         success {
             junit '**/target/surefire-reports/TEST-*.xml'
             archiveArtifacts 'target/*.jar'
+            sh "docker stop ${CONTAINER_NAME}"
+            deleteDir()
         }
     }
-    environment {
-		CONTAINER_NAME = 'pandaapp'
-        IMAGE = sh script: 'mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout', returnStdout: true
-        VERSION = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
-	}
 }
