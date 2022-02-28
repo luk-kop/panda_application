@@ -1,6 +1,6 @@
 pipeline {
     agent {
-		label 'slave-docker'
+		label 'Slave'
 	}
     tools {
         maven 'M3.6.3'
@@ -32,7 +32,7 @@ pipeline {
         }
         stage('Build Docker image') {
             steps {
-                sh "mvn package -Pdocker"
+                sh "mvn package -Pdocker -Dmaven.test.skip=true"
             } 
         }
         stage('Run Docker container') {
