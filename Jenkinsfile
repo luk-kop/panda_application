@@ -10,7 +10,7 @@ pipeline {
         stage('Clear running apps') {
             steps {
                 // Clear previous instances of app build
-                sh 'docker rm pandaapp -f || true'
+                sh "docker rm ${CONTAINER_NAME} -f || true"
             }
         }
         // stage('Clone') {
@@ -30,9 +30,21 @@ pipeline {
                 sh "mvn package -Pdocker"
             } 
         }
+        stage('Run Docker container') {
+            steps {
+                sh "docker run -d -p 8080:8080 --name ${CONTAINER_NAME} ${IMAGE}:${VERSION}"
+            } 
+        }
         stage('Test Selenium') {
             steps {
                 sh "mvn test -Pselenium"
+            } 
+        }
+        stage('Application deployment') {
+            steps {
+                withMaven(globalMavenSettingsConfig: 'null', jdk: 'null', maven: 'M3.6.3', mavenSettingsConfig: '36a02879-07cb-4ab3-8f5c-85a05dd037d9') {
+                    sh "mvn deploy"
+                }
             } 
         }
     }
@@ -44,4 +56,9 @@ pipeline {
             archiveArtifacts 'target/*.jar'
         }
     }
+    environment {
+		CONTAINER_NAME = 'pandaapp'
+        IMAGE = sh script: 'mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout', returnStdout: true
+        VERSION = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
+	}
 }
