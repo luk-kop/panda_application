@@ -9,6 +9,7 @@ pipeline {
 		CONTAINER_NAME = 'pandaapp'
         IMAGE = sh script: 'mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout', returnStdout: true
         VERSION = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
+
 	}
     stages {
         stage('Clear running apps') {
@@ -46,8 +47,8 @@ pipeline {
         }
         stage('Application deployment') {
             steps {
-                withMaven(globalMavenSettingsConfig: 'null', maven: 'M3.6.3', mavenSettingsConfig: '36a02879-07cb-4ab3-8f5c-85a05dd037d9') {
-                    sh "mvn deploy"
+                configFileProvider([configFile('36a02879-07cb-4ab3-8f5c-85a05dd037d9', variable: 'MAVEN_GLOBAL_SETTINGS')]) {
+                    sh "mvn -gs ${MAVEN_GLOBAL_SETTINGS} deploy -Dmaven.test.skip=true -e"
                 }
             } 
         }
