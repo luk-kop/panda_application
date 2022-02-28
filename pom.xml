@@ -113,8 +113,8 @@
               </execution>
             </executions>
             <configuration>              
-            <!-- <repository>${project.artifactId}</repository><tag>${project.version}</tag> -->
-              <repository>${artifactory.host}:${artifactory.port}/docker1/${project.artifactId}</repository>
+            <repository>${project.artifactId}</repository><tag>${project.version}</tag>
+              <!-- <repository>${artifactory.host}:${artifactory.port}/docker1/${project.artifactId}</repository> -->
               <tag>${project.version}</tag>
               <buildArgs>
                 <JAR_FILE>target/${project.artifactId}-${project.version}.jar</JAR_FILE>

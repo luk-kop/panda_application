@@ -58,7 +58,7 @@ pipeline {
         success {
             junit '**/target/surefire-reports/TEST-*.xml'
             archiveArtifacts 'target/*.jar'
-            sh "docker stop ${CONTAINER_NAME}"
+            sh "docker stop ${CONTAINER_NAME} || true"
             deleteDir()
         }
     }
