@@ -46,7 +46,7 @@ pipeline {
         }
         stage('Application deployment') {
             steps {
-                withMaven(globalMavenSettingsConfig: 'null', jdk: 'null', maven: 'M3.6.3', mavenSettingsConfig: '36a02879-07cb-4ab3-8f5c-85a05dd037d9') {
+                withMaven(globalMavenSettingsConfig: 'null', maven: 'M3.6.3', mavenSettingsConfig: '36a02879-07cb-4ab3-8f5c-85a05dd037d9') {
                     sh "mvn deploy"
                 }
             } 
