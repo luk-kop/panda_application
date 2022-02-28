@@ -1,17 +1,9 @@
-# Stage 1 - builder
-FROM maven:3.8.4-jdk-11 as builder
+FROM openjdk:11.0
 
-WORKDIR /code
-COPY ./src/ /code/src/
-COPY ./pom.xml /code
-
-RUN ["mvn", "clean", "package"]
-
-# Stage 2 - production
-FROM openjdk:11.0 AS production
+ARG JAR_FILE
 
 WORKDIR /app
-COPY --from=builder /code/target/*.jar ./app.jar
+COPY ${JAR_FILE} ./app.jar
 
 EXPOSE 8080
 
