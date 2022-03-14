@@ -4,12 +4,13 @@ pipeline {
 	}
     tools {
         maven 'M3.6.3'
+        terraform 'Terraform'
     }
-        environment {
+    environment {
 		CONTAINER_NAME = 'pandaapp'
         IMAGE = sh script: 'mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout', returnStdout: true
         VERSION = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
-
+        ANSIBLE = tool name: 'Ansible', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
 	}
     stages {
         stage('Clear running apps') {
@@ -78,10 +79,16 @@ pipeline {
                 }
             }
         }
+        stage('Remove environment') {
+            input 'Remove environment' 
+            dir('infrastructure/terraform') {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS']]) {
+                        sh 'terraform destroy -auto-approve -var-file panda.tfvars'
+                    }
+            }
+        }
     }
     post {
-        // If Maven was able to run the tests, even if some of the test
-        // failed, record the test results and archive the jar file.
         success {
             junit '**/target/surefire-reports/TEST-*.xml'
             archiveArtifacts 'target/*.jar'
