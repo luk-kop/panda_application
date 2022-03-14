@@ -1,13 +1,13 @@
 pipeline {
     agent {
-		label 'Slave'
+        label 'Slave'
 	}
     tools {
         maven 'M3.6.3'
         terraform 'Terraform'
     }
     environment {
-		CONTAINER_NAME = 'pandaapp'
+        CONTAINER_NAME = 'pandaapp'
         IMAGE = sh script: 'mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout', returnStdout: true
         VERSION = sh script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout', returnStdout: true
         ANSIBLE = tool name: 'Ansible', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
@@ -56,7 +56,7 @@ pipeline {
         stage('Run terraform') {
             steps {
                 dir('infrastructure/terraform') {
-                    // credential (Secret file) with id 'terraform-pem' is injected to temp var 'terraformpanda' and then is stored as 'panda.pem'
+                    // Secret file credentials (SSH private key) with id 'terraform-pem' is injected to temp var 'terraformpanda' and then is stored as 'panda.pem'
                     withCredentials([file(credentialsId: 'terraform-pem', variable: 'terraformpanda')]) { sh "cp \$terraformpanda ../panda.pem" }
                     // AWS credentials
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS']]) {
@@ -84,8 +84,8 @@ pipeline {
                 input 'Remove environment' 
                 dir('infrastructure/terraform') {
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS']]) {
-                            sh 'terraform destroy -auto-approve -var-file panda.tfvars'
-                        }
+                        sh 'terraform destroy -auto-approve -var-file panda.tfvars'
+                    }
                 }
             }
         }
@@ -99,12 +99,12 @@ pipeline {
         }
         failure {
             dir('infrastructure/terraform') {
-                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS']]) {
-                        sh 'terraform destroy -auto-approve -var-file panda.tfvars'
-                    }
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS']]) {
+                    sh 'terraform destroy -auto-approve -var-file panda.tfvars'
                 }
-                sh "docker stop ${CONTAINER_NAME}"
-                deleteDir()
+            }
+            sh "docker stop ${CONTAINER_NAME}"
+            deleteDir()
         }
     }
 }

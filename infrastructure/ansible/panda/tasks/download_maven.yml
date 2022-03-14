@@ -11,8 +11,13 @@
       - libssl-dev
       - zlib1g-dev
       - python3-pip
+  register: result
+  retries: 5
+  delay: 10
+  until: result is not failed
   connection: local
-- name: install lxml
+
+- name: Install lxml
   command: "pip3 install lxml"
   environment:
     CFLAGS: "-O0"
