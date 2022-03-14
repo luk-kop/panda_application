@@ -13,6 +13,10 @@ resource "aws_instance" "panda" {
     user        = "ubuntu"
     private_key = file(var.ssh_key_path)
   }
+  
+  tags = {
+    Name = "panda-application-${count.index}"
+  }
 }
 
 resource "aws_security_group" "sg-pub" {
