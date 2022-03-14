@@ -52,6 +52,32 @@ pipeline {
                 }
             } 
         }
+        stage('Run terraform') {
+            steps {
+                dir('infrastructure/terraform') {
+                    // credential (Secret file) with id 'terraform-pem' is injected to temp var 'terraformpanda' and then is stored as 'panda.pem'
+                    withCredentials([file(credentialsId: 'terraform-pem', variable: 'terraformpanda')]) { sh "cp \$terraformpanda ../panda.pem" }
+                    // AWS credentials
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS']]) {
+                        sh 'terraform init && terraform apply -auto-approve -var-file panda.tfvars'
+                    }
+                }
+            }
+        }
+        stage('Copy Ansible role') {
+            steps {
+                sh 'sleep 180'
+                sh 'cp -r infrastructure/ansible/panda /etc/ansible/roles/'
+            }
+        }
+        stage('Run Ansible') {
+            steps {
+                dir('infrastructure/ansible') {
+                     sh 'chmod 400 ../panda.pem'
+                     sh 'ansible-playbook -i ./inventory playbook.yml -e ansible_python_interpreter=/usr/bin/python3'
+                }
+            }
+        }
     }
     post {
         // If Maven was able to run the tests, even if some of the test
@@ -61,6 +87,15 @@ pipeline {
             archiveArtifacts 'target/*.jar'
             sh "docker stop ${CONTAINER_NAME} || true"
             deleteDir()
+        }
+        failure {
+            dir('infrastructure/terraform') {
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'AWS']]) {
+                        sh 'terraform destroy -auto-approve -var-file panda.tfvars'
+                    }
+                }
+                sh "docker stop ${CONTAINER_NAME}"
+                deleteDir()
         }
     }
 }
