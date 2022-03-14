@@ -1,2 +1,7 @@
 ---
 # handlers file for panda
+- name: Start application
+  service:
+    name: application
+    state: restarted
+  become: true

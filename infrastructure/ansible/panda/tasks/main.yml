@@ -14,6 +14,7 @@
     owner: ubuntu
     group: ubuntu
     mode: '0644'
+  notify: Start application
 
 - name: Create a service definition file
   copy:
@@ -24,8 +25,3 @@
     mode: '0644'
   become: yes
 
-- name: Start application
-  service:
-    name: application
-    state: restarted
-  become: true
