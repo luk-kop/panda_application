@@ -1,1 +1,40 @@
+# App artifact dir
 target/
+*.jar
+
+# Ansible inventory
+infrastructure/ansible/inventory
+
+# SSH keys
+*.pem
+
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Lock file
+*.lock.hcl
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Ignore all .tfvars files
+*.tfvars
+*.tfvars.json
+
+# Include panda.tfvars
+!infrastructure/terraform/panda.tfvars
+
+# Ignore override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
