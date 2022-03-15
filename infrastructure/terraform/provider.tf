@@ -1,4 +1,5 @@
 provider "aws" {
   region  = var.region
-  profile = var.profile
+  // uncomment only when AWS user profile is used
+  // profile = var.profile
 }

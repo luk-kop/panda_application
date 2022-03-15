@@ -26,6 +26,6 @@ variable "region" {
 
 variable "profile" {
   type        = string
-  description = "AWS profile used to deploy resources"
+  description = "AWS profile used to deploy resources. Use only when AWS profile is used."
   default     = "default"
 }
