@@ -1,4 +1,4 @@
-# Articatory details
+# Artifcat repository details (example for Artifactory)
 ---
 repository_url: http://192.168.44.44:8081/artifactory/libs-release-local
 username: admin
