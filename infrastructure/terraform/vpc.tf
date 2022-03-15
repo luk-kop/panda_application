@@ -3,12 +3,16 @@ resource "aws_vpc" "vpc" {
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
-    Name = "Terraform VPC"
+    Name = "${local.name_prefix}-VPC"
   }
 }
 
 resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.vpc.id
+
+  tags = {
+    Name = "${local.name_prefix}-igw"
+  }
 }
 
 
@@ -21,7 +25,7 @@ resource "aws_route_table" "public_route_table" {
   }
 
   tags = {
-    Name = "rt-pub"
+    Name = "${local.name_prefix}-rt-pub"
   }
 }
 
@@ -37,4 +41,8 @@ resource "aws_subnet" "pub_subnet" {
   cidr_block              = cidrsubnet(aws_vpc.vpc.cidr_block, 8, count.index)
   map_public_ip_on_launch = true
   availability_zone       = var.availability_zones[count.index]
+
+  tags = {
+    Name = "${local.name_prefix}-subnet-pub-${count.index}"
+  }
 }

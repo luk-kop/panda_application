@@ -13,14 +13,15 @@ resource "aws_instance" "panda" {
     user        = "ubuntu"
     private_key = file(var.ssh_key_path)
   }
-  
+
   tags = {
-    Name = "panda-application-${count.index}"
+    Name = "${local.name_prefix}-${count.index}"
   }
 }
 
 resource "aws_security_group" "sg-pub" {
-  vpc_id = aws_vpc.vpc.id
+  name_prefix = "${local.name_prefix}-sg-pub"
+  vpc_id      = aws_vpc.vpc.id
 
   ingress {
     from_port   = 80
@@ -48,5 +49,9 @@ resource "aws_security_group" "sg-pub" {
     to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "${local.name_prefix}-sg-pub"
   }
 }

@@ -1,5 +1,5 @@
 resource "aws_lb" "alb" {
-  name               = "alb"
+  name               = "${local.name_prefix}-alb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.sg-pub.id]
@@ -18,7 +18,7 @@ resource "aws_lb_listener" "alb-listener" {
 }
 
 resource "aws_lb_target_group" "tg" {
-  name        = "tg"
+  name        = substr(format("%s-%s", "${local.name_prefix}-tg", replace(random_uuid.some_uuid.result, "-", "")), 0, 32)
   port        = 8080
   protocol    = "HTTP"
   target_type = "instance"
