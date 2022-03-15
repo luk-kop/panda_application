@@ -12,9 +12,9 @@
       - zlib1g-dev
       - python3-pip
   register: result
-  retries: 5
-  delay: 10
-  until: result is not failed
+  retries: 100
+  delay: 5
+  until: result is success
   connection: local
 
 - name: Install lxml

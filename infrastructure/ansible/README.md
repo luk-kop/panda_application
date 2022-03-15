@@ -3,7 +3,7 @@
 > This part of project is responsible for EC2 instances configuration with Ansible tool (dedicated `panda` role). Should be used only after successfully deploying the environment in AWS by Terraform (in `infrastructure/terraform` dir).
 
 ### The `panda` role feautures
-- Downloads panda application JAR from artifact repository
+- Downloads panda application JAR from artifact repository.
 - Creates `systemd.service` unit.
 - Starts the application.
 
