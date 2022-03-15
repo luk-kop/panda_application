@@ -7,13 +7,6 @@ resource "aws_instance" "panda" {
   vpc_security_group_ids = [aws_security_group.sg-pub.id]
   subnet_id              = aws_subnet.pub_subnet[count.index].id
 
-  connection {
-    host        = self.public_ip
-    type        = "ssh"
-    user        = "ubuntu"
-    private_key = file(var.ssh_key_path)
-  }
-
   tags = {
     Name = "${local.name_prefix}-${count.index}"
   }
